@@ -1,0 +1,16 @@
+{
+  "name": "api-v2",
+  "version": "1.0.0",
+  "description": "API v2 Uptime",
+  "main": "index.js",
+  "author": "Hanif",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.10.9"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.8",
+    "@types/mongoose": "^5.7.36"
+  }
+}
