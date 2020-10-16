@@ -54,7 +54,18 @@ router.delete("/website/:id", async (req, res) => {
     if (isEmpty(req.params.id)) {
         return res.status(403).json({ success: false, message: "ID cannot be empty!" });
     } else {
-        
+        await Website.findOneAndDelete({ _id: req.params.id }, (err, result) => {
+            if (err) {
+                return res.status(500).json({
+                    success: false,
+                    err
+                });
+            }
+            if (!result) {
+                return res.status(404).json({ success: false, message: "Not found" });
+            }
+            return res.status(200).json({ success: true, result });
+        }).catch(e => console.error(e));
     }
 });
 

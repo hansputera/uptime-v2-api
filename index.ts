@@ -1,9 +1,12 @@
 import express from "express";
 import { json, urlencoded } from "body-parser";
 const app = express();
+import db from "./db";
 
 app.use(urlencoded({ extended: false }));
 app.use(json());
+
+db.on("error", console.error);
 
 app.get("/", (_, res) => res.send(""));
 app.use("/api", require("./routes/api"));
