@@ -56,7 +56,7 @@ router.delete("/website/:id", async (req, res) => {
     } else {
         await Website.findOneAndDelete({ _id: req.params.id }, (err, result) => {
             if (err) {
-                return res.status(500).json({
+                return res.status(403).json({
                     success: false,
                     err
                 });
@@ -67,6 +67,46 @@ router.delete("/website/:id", async (req, res) => {
             return res.status(200).json({ success: true, result });
         }).catch(e => console.error(e));
     }
+});
+
+// Update Website Detail
+
+router.put("/website/:id", async (req, res) => {
+    if (isEmpty(req.params.id)) {
+        return res.status(403).json({ success: false, message: "ID cannot be empty!" });
+    }
+
+    const url = req.body.url as string,
+          title = req.body.title as string;
+
+    if (isEmpty(url)) {
+        return res.status(403).json({ success: false, message: "missing body" });
+    }
+    if (isEmpty(title)) {
+        return res.status(403).json({ success: false, message: "missing body" });
+    }
+    await Website.findOne({ _id: req.params.id }, async (err, result) => {
+        if (err) {
+            return res.status(403).json({ success: false, err });
+        }
+        if (!result) {
+            return res.status(404).json({ success: false, message: "Not found" });
+        }
+        await Website.updateOne({ _id: req.params.id }, {
+            _id: req.params.id,
+            url,
+            title,
+            authorID: (result as any).authorID
+        }, (error, rawData) => {
+            if (error) {
+                return res.status(500).json({ success: false, err: error });
+            }
+            return res.status(200).json({
+                success: true,
+                rawData
+            });
+        }).catch(e => console.error(e));
+    });
 });
 
 export = router;
